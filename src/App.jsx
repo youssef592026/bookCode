@@ -13,9 +13,14 @@ import { StoreProvider, useStore } from './lib/store';
 import { ToastProvider } from './components/ui';
 
 function Gate({ children }) {
-  const { loadError, api } = useStore();
+  const { loadError, api, remote } = useStore();
   return (
     <>
+      {import.meta.env.PROD && !remote && (
+        <div className="load-error" role="alert">
+          إعدادات Supabase غير موجودة في هذا النشر. أضف VITE_SUPABASE_URL و VITE_SUPABASE_PUBLISHABLE_KEY في إعدادات Vercel ثم أعد النشر؛ الحفظ الحالي محلي لهذا المتصفح فقط.
+        </div>
+      )}
       {loadError && (
         <div className="load-error" role="alert">
           تعذر الاتصال بقاعدة البيانات: {loadError}
